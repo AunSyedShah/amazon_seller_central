@@ -8,7 +8,19 @@
           integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 </head>
 <body>
-<div class="container">
+<div class="container my-1">
+    {% for message in messages %}
+        {% if message.tags == 'error' %}
+            <div class="alert alert-danger" role="alert">
+                {{ message }}
+            </div>
+        {% elif message.tags == 'success' %}
+            <div class="alert alert-success" role="alert">
+                {{ message }}
+            </div>
+        {% endif %}
+    {% endfor %}
+
     {% block content %}
 
     {% endblock %}
