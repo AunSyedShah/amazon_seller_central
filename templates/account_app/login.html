@@ -1,13 +1,29 @@
 {% extends 'base.html' %}
-{% load crispy_forms_tags %}
+{% load static %}
 {% block title %}
     Login
 {% endblock %}
+{% block css_style %}
+
+    <style>
+        #main_div {
+            background-image: url("{% static 'account_app/269811391_1310798559386993_4387993744777411237_n.jpg' %}");
+        }
+
+    </style>
+
+{% endblock %}
 {% block content %}
-    <h2>Login</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form|crispy }}
-        <button type="submit" class="btn btn-primary">Login</button>
-    </form>
+    <div id="main_div">
+        <h2>Login</h2>
+        <form method="post">
+            {% csrf_token %}
+            <!-- label and input field for username and password -->
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password">
+            <button type="submit">Login</button>
+        </form>
+    </div>
 {% endblock %}
