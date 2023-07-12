@@ -5,12 +5,11 @@ from django.contrib.auth.models import User
 class Product(models.Model):
     name = models.CharField(max_length=100)
     price = models.IntegerField()
-    color = models.CharField(max_length=50, default='N/A')
 
     # Add other fields as needed
 
     def __str__(self):
-        return self.name
+        return f"{self.id} - {self.name} - {self.price}"
 
 
 class Order(models.Model):
