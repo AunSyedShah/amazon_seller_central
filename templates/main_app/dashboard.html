@@ -9,7 +9,7 @@
         <button onclick="add_to_cart()" value="{{ product.id }}">Add to
             Cart
         </button>
-        <h3 id="cart_status">{{ request.session.cart.total_quantity }}</h3>
+        <h3 id="cart_status" id="cart_status">{{ request.session.cart.total_quantity }}</h3>
     {% endfor %}
     <script>
         function add_to_cart() {
@@ -18,7 +18,7 @@
                 function (response) {
                     const data = response.data;
                     console.log(data);
-
+                    document.getElementById('cart_status').innerHTML = data.total_quantity; // update cart status
                 }
             )
         }
