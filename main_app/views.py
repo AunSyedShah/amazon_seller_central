@@ -24,3 +24,11 @@ def remove_product(request, product_id):
     product = Product.objects.get(pk=product_id)
     response = cart.remove_product(product)
     return JsonResponse(response)
+
+
+def display_cart(request):
+    cart = Cart(request)
+    context = {
+        'cart': cart.get_cart_items()
+    }
+    return render(request, 'main_app/cart.html', context)

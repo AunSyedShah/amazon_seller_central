@@ -3,36 +3,32 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Your Cart</h1>
-    {% if cart_items %}
-        <table>
-            <thead>
+    <h1>Cart</h1>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Subtotal</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in cart %}
             <tr>
-                <th>Product Name</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Subtotal</th>
-                <th></th>
+                <td>{{ item.product.name }}</td>
+                <td>{{ item.product.price }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.subtotal }}</td>
             </tr>
-            </thead>
-            <tbody>
-            {% for item in cart_items %}
-                <tr>
-                    <td>{{ item.product.name }}</td>
-                    <td>{{ item.quantity }}</td>
-                    <td>{{ item.product.price }}</td>
-                    <td>
-                        <form action="{% url 'main_app:remove_from_cart' item.product.id %}" method="POST">
-                            {% csrf_token %}
-                            <button type="submit">Remove</button>
-                        </form>
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <p>Your cart is empty.</p>
-    {% endif %}
-    <p>Total Price: {{ total_price }}</p>
+        {% endfor %}
+        </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="3">Total</td>
+            <td>{{ cart.get_total }}</td>
+        </tr>
+        </tfoot>
+    </table>
+    {#    <a href="{% url 'cart:checkout' %}" class="btn btn-primary">Checkout</a>#}
 {% endblock %}
