@@ -70,4 +70,5 @@ class Cart(object):
                         "price": self.cart[product_id]["price"],
                     }
                 )
+        print(cart_items)
         return cart_items

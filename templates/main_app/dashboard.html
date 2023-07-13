@@ -1,29 +1,41 @@
 {% extends 'base.html' %}
 {% block title %}
-    Dashboard
+Dashboard
 {% endblock %}
 {% block content %}
-    {% for product in products %}
-        <h2>{{ product.name }}</h2>
-        <p>Rs. {{ product.price }}</p>
-        <button onclick="add_to_cart()" value="{{ product.id }}">Add to
-            Cart
-        </button>
-        <h3 id="cart_status" id="cart_status">{{ request.session.cart.total_quantity }}</h3>
+{% for product in products %}
+    {% if forloop.counter0|divisibleby:3 %}
+    <div class="row my-3">
+    {% endif %}
+        <div class="col-xs-12 my-1 col-sm-6 col-md-6 col-lg-4 d-flex justify-content-center">
+            <div class="card" style="width: 18rem;">
+                {% comment %} <img src="..." class="card-img-top" alt="..."> {% endcomment %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <p class="card-text">Rs. {{ product.price }}</p>
+                    <button onclick="add_to_cart()" value="{{ product.id }}" class='btn btn-primary'>Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    {% if forloop.counter0|add:1|divisibleby:3 or forloop.last %}
+    </div>
+    {% endif %}
     {% endfor %}
-    <script>
-        function add_to_cart() {
-            const product_id = event.target.value;
-            axios.get(`add-product/${product_id}`).then(
-                function (response) {
-                    const data = response.data;
-                    console.log(data);
-                    document.getElementById('cart_status').innerHTML = data.total_quantity; // update cart status
-                }
-            )
-        }
-    </script>
-    <script>
-        console.log('overridden by Dashboard');
-    </script>
+
+<script>
+
+    function add_to_cart() {
+        const product_id = event.target.value;
+        axios.get(`add-product/${product_id}`).then(
+            function (response) {
+                const data = response.data;
+                console.log(data);
+
+            }
+        )
+    }
+</script>
+<script>
+
+</script>
 {% endblock %}
