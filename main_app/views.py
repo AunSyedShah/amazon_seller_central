@@ -6,10 +6,8 @@ from django.http import JsonResponse
 
 # Create your views here.
 def dashboard(request):
-    context = {
-        'products': Product.objects.all()
-    }
-    return render(request, 'main_app/dashboard.html', context)
+    context = {"products": Product.objects.all()}
+    return render(request, "main_app/dashboard.html", context)
 
 
 def add_product(request, product_id):
@@ -27,8 +25,13 @@ def remove_product(request, product_id):
 
 
 def display_cart(request):
+    context = {}
     cart = Cart(request)
+    cart_detail = cart.get_cart_items()
+    individual_items = cart_detail["individual_items"]
+    cart_total_price = cart_detail["cart_total_price"]
     context = {
-        'cart': cart.get_cart_items()
+        "individual_items": individual_items,
+        "cart_total_price": cart_total_price,
     }
-    return render(request, 'main_app/cart.html', context)
+    return render(request, "main_app/cart.html", context)

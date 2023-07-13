@@ -24,7 +24,11 @@ class Cart(object):
     def add_product(self, product):
         product_id = str(product.id)
         if product_id not in self.cart:  # if product is not already in cart, add it
-            self.cart[product_id] = {"quantity": 1, "price": str(product.price)}
+            self.cart[product_id] = {
+                "quantity": 1,
+                "product_name": product.name,
+                "price": str(product.price),
+            }
             self.cart["total_quantity"] += 1
             self.save()
             return {
@@ -58,7 +62,23 @@ class Cart(object):
                 self.save()
                 return {"message": f"product with id {product_id} removed from cart"}
 
-
     def get_cart_items(self):
-        print(self.cart)    
-        return {"message": True}
+        cart_dict = self.cart
+        individual_items = []
+        cart_total_price = 0
+        for product_id, product_data in cart_dict.items():
+            if product_id != "total_quantity":
+                item = {
+                    "product_name": product_data["product_name"],
+                    "quantity": product_data["quantity"],
+                    "price": product_data["price"],
+                    "total": int(product_data["price"]) * int(product_data["quantity"]),
+                }
+                cart_total_price += int(product_data["price"]) * int(product_data["quantity"])
+                individual_items.append(item)
+        cart_total = {
+            "total_quantity": cart_dict["total_quantity"],
+            "individual_items": individual_items,
+            "cart_total_price": cart_total_price,
+        }
+        return cart_total
