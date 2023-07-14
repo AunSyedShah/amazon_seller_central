@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}
+    Dashboard
+{% endblock %}
+{% block content %}
+    <h1>{{ product.name }}</h1>
+    <h2>Rs. {{ product.price }}</h2>
+    <h3 id="available_stock">Available Stock: {{ product.quantity_available }}</h3>
+    <button onclick="add_to_cart()" value="{{ product.id }}" id="add_cart_btn">Add To Cart</button>
+    <script>
+
+        function add_to_cart() {
+            const product_id = event.target.value;
+            const address = `http://127.0.0.1:8000/add-product/${product_id}/`;
+            axios.get(address).then(
+                function (response) {
+                    const data = response.data;
+                    console.log(data);
+                }
+            )
+        }
+    </script>
+{% endblock %}

@@ -1,41 +1,41 @@
 {% extends 'base.html' %}
 {% block title %}
-Dashboard
+    Dashboard
 {% endblock %}
 {% block content %}
-{% for product in products %}
-    {% if forloop.counter0|divisibleby:3 %}
-    <div class="row my-3">
-    {% endif %}
-        <div class="col-xs-12 my-1 col-sm-6 col-md-6 col-lg-4 d-flex justify-content-center">
-            <div class="card" style="width: 18rem;">
-                {% comment %} <img src="..." class="card-img-top" alt="..."> {% endcomment %}
-                <div class="card-body">
-                    <h5 class="card-title">{{ product.name }}</h5>
-                    <p class="card-text">Rs. {{ product.price }}</p>
-                    <button onclick="add_to_cart()" value="{{ product.id }}" class='btn btn-primary'>Add to Cart</button>
-                </div>
+    {% for product in products %}
+        {% if forloop.counter0|divisibleby:3 %}
+            <div class="row my-3">
+        {% endif %}
+    <div class="col-xs-12 my-1 col-sm-6 col-md-6 col-lg-4 d-flex justify-content-center">
+        <div class="card" style="width: 18rem;">
+            {% comment %} <img src="..." class="card-img-top" alt="..."> {% endcomment %}
+            <div class="card-body">
+                <h5 class="card-title"><a role="button">{{ product.name }}</a></h5>
+                <p class="card-text">Rs. {{ product.price }}</p>
+                <button onclick="add_to_cart()" value="{{ product.id }}" class='btn btn-primary'>Add to Cart</button>
             </div>
         </div>
-    {% if forloop.counter0|add:1|divisibleby:3 or forloop.last %}
     </div>
+    {% if forloop.counter0|add:1|divisibleby:3 or forloop.last %}
+        </div>
     {% endif %}
     {% endfor %}
 
-<script>
+    <script>
 
-    function add_to_cart() {
-        const product_id = event.target.value;
-        axios.get(`add-product/${product_id}`).then(
-            function (response) {
-                const data = response.data;
-                console.log(data);
+        function add_to_cart() {
+            const product_id = event.target.value;
+            axios.get(`add-product/${product_id}`).then(
+                function (response) {
+                    const data = response.data;
+                    console.log(data);
 
-            }
-        )
-    }
-</script>
-<script>
+                }
+            )
+        }
+    </script>
+    <script>
 
-</script>
+    </script>
 {% endblock %}

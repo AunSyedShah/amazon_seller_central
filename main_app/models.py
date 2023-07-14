@@ -10,13 +10,15 @@ class Product(models.Model):
 
     def __str__(self):
         return f"{self.id} - {self.name} - {self.price}"
-    
+
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, default=None)
 
     def __str__(self) -> str:
         return f"{self.user.first_name} {self.user.last_name}'s Profile"
-    
+
+
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
     products = models.ManyToManyField(Product, default=None)

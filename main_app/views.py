@@ -47,3 +47,10 @@ def clear_cart(request):
 def clear_all_sessions(request):
     Session.objects.all().delete()
     return JsonResponse({"message": "all sessions clear"})
+
+
+def product_detail(request, product_id):
+    context = {}
+    product = Product.objects.get(pk=product_id)
+    context["product"] = product
+    return render(request, "main_app/product_detail.html", context)
