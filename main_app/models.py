@@ -19,3 +19,4 @@ class UserProfile(models.Model):
     
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
+    products = models.ManyToManyField(Product, default=None)
