@@ -3,6 +3,7 @@ from .models import Product
 from cart_app.cart import Cart
 from django.http import JsonResponse
 from django.contrib import messages
+from django.contrib.sessions.models import Session
 
 
 # Create your views here.
@@ -40,4 +41,9 @@ def clear_cart(request):
     cart = Cart(request)
     res = cart.clear_cart()
     messages.success(request, res["message"])
-    return redirect('main_app:dashboard')
+    return redirect("main_app:dashboard")
+
+
+def clear_all_sessions(request):
+    Session.objects.all().delete()
+    return JsonResponse({"message": "all sessions clear"})
