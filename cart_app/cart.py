@@ -9,7 +9,7 @@ class Cart(object):
             settings.CART_SESSION_ID
         )  # if cart exists return, otherwise None
         if (
-            not self.cart
+                not self.cart
         ):  # if cart is not already initialized, initialize it with empty dicts
             self.cart = self.session[settings.CART_SESSION_ID] = {}
             self.cart.update({"total_quantity": 0})
@@ -82,3 +82,8 @@ class Cart(object):
             "cart_total_price": cart_total_price,
         }
         return cart_total
+
+    def clear_cart(self):
+        self.cart = {}
+        self.save()
+        return {"message": "cart cleared"}

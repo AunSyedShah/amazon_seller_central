@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .models import Product
 from cart_app.cart import Cart
 from django.http import JsonResponse
+from django.contrib import messages
 
 
 # Create your views here.
@@ -35,3 +36,10 @@ def display_cart(request):
         "cart_total_price": cart_total_price,
     }
     return render(request, "main_app/cart.html", context)
+
+
+def clear_cart(request):
+    cart = Cart(request)
+    res = cart.clear_cart()
+    messages.success(request, res["message"])
+    return redirect('main_app:dashboard')
