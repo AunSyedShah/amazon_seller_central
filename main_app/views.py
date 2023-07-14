@@ -31,10 +31,8 @@ def display_cart(request):
     cart_detail = cart.get_cart_items()
     individual_items = cart_detail["individual_items"]
     cart_total_price = cart_detail["cart_total_price"]
-    context = {
-        "individual_items": individual_items,
-        "cart_total_price": cart_total_price,
-    }
+    context["individual_items"] = individual_items
+    context["cart_total_price"] = cart_total_price
     return render(request, "main_app/cart.html", context)
 
 

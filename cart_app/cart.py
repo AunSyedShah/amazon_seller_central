@@ -19,7 +19,7 @@ class Cart(object):
         self.session.modified = True
 
     def get_cart_total_quantity(self):
-        return str(self.cart["total_quantity"])
+        return str(self.cart.get("total_quantity", None))
 
     def add_product(self, product):
         product_id = str(product.id)
@@ -64,6 +64,7 @@ class Cart(object):
 
     def get_cart_items(self):
         cart_dict = self.cart
+        print(cart_dict)
         individual_items = []
         cart_total_price = 0
         for product_id, product_data in cart_dict.items():
@@ -84,6 +85,6 @@ class Cart(object):
         return cart_total
 
     def clear_cart(self):
-        self.cart = {}
+        self.cart.clear()
         self.save()
         return {"message": "cart cleared"}
