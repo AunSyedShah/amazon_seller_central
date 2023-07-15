@@ -16,6 +16,7 @@
                                           href="{% url 'main_app:product_detail' product.id %}">{{ product.name }}</a>
                 </h5>
                 <p class="card-text">Rs. {{ product.price }}</p>
+                <h6>Available Stock: {{ product.quantity_available }}</h6>
             </div>
         </div>
     </div>
