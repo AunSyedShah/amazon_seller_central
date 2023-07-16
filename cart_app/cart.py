@@ -26,6 +26,7 @@ class Cart(object):
         if product_id not in self.cart:  # if product is not already in cart, add it
             self.cart[product_id] = {
                 "quantity": 1,
+                "product_id": product.id,
                 "product_name": product.name,
                 "price": str(product.price),
             }
@@ -64,12 +65,12 @@ class Cart(object):
 
     def get_cart_items(self):
         cart_dict = self.cart
-        print(cart_dict)
         individual_items = []
         cart_total_price = 0
         for product_id, product_data in cart_dict.items():
             if product_id != "total_quantity":
                 item = {
+                    "product_id": product_data["product_id"],
                     "product_name": product_data["product_name"],
                     "quantity": product_data["quantity"],
                     "price": product_data["price"],
