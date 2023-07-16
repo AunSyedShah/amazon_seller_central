@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect
-from .models import Product, Order, OrderItem
+from .models import Product, Order
 from cart_app.cart import Cart
 from django.http import JsonResponse
 from django.contrib import messages
 from django.contrib.sessions.models import Session
 from django.contrib.auth.models import User
+from django.core.mail import send_mail
+from django.conf import settings
 
 
 # Create your views here.
@@ -76,15 +78,15 @@ def checkout(request):
             product = Product.objects.get(pk=item["product_id"])
             product.quantity_available -= item["quantity"]
             product.save()
-            order_item = OrderItem.objects.create(
-                order=order,
-                product=product,
-                quantity=item["quantity"],
-                price=item["price"],
-            )
-            # put order_item in order
             order.products.add(product)
         cart.clear_cart()
+        # email code
+        subject = 'Order Confirmation'
+        message = f"Your order has been placed successfully. Your order id is {order.id}"
+        email_from = settings.EMAIL_HOST_USER
+        recipient_list = ['engrrizwanaslam@gmail.com', ]
+        send_mail(subject, message, email_from, recipient_list)
+        # email code end
         messages.success(request, "Order Placed Successfully")
         return redirect("main_app:dashboard")
     return render(request, "main_app/checkout.html", context)
