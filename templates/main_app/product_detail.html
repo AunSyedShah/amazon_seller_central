@@ -16,6 +16,20 @@
                 function (response) {
                     const data = response.data;
                     console.log(data);
+                    // select available stock via id
+                    const available_stock = document.getElementById('available_stock');
+                    // select add_cart_btn via id
+                    const add_cart_btn = document.getElementById('add_cart_btn');
+                    // trim available stock to get only number
+                    const available_stock_number = parseInt(available_stock.innerText.trim().split(' ')[2]);
+                    // reduce available stock number by 1
+                    const new_available_stock_number = available_stock_number - 1;
+                    // set new available stock number
+                    available_stock.innerText = `Available Stock: ${new_available_stock_number}`;
+                    // disable add to cart button if available stock is 0
+                    if (new_available_stock_number === 0) {
+                        add_cart_btn.disabled = true;
+                    }
                 }
             )
         }
