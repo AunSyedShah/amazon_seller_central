@@ -81,12 +81,22 @@ def checkout(request):
             order.products.add(product)
         cart.clear_cart()
         # email code
-        subject = 'Order Confirmation'
-        message = f"Your order has been placed successfully. Your order id is {order.id}"
-        email_from = settings.EMAIL_HOST_USER
-        recipient_list = ['engrrizwanaslam@gmail.com', ]
-        send_mail(subject, message, email_from, recipient_list)
+        # subject = 'Order Confirmation'
+        # message = f"Your order has been placed successfully. Your order id is {order.id}"
+        # email_from = settings.EMAIL_HOST_USER
+        # recipient_list = ['engrrizwanaslam@gmail.com', ]
+        # send_mail(subject, message, email_from, recipient_list)
         # email code end
         messages.success(request, "Order Placed Successfully")
         return redirect("main_app:dashboard")
     return render(request, "main_app/checkout.html", context)
+
+
+def print_order_history(request):
+    context = {}
+    user = request.user
+    orders = Order.objects.filter(user=user)
+    context["orders"] = orders
+    for order in orders:
+        print(order.products)
+    return render(request, "main_app/order_history.html", context)

@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block title %}
+    Dashboard
+{% endblock %}
+{% block content %}
+    {% for order in orders %}
+        <h1>{{ order.id }}</h1>
+{#        {% for product in order %}#}
+{#            <h1>{{ product.id }}</h1>#}
+{#            <h1>{{ product.name }}</h1>#}
+{#            <h1>{{ product.price }}</h1>#}
+{#        {% endfor %}#}
+
+    {% endfor %}
+
+    <script>
+        // javascript on load
+        window.onload = function () {
+            // select available stock via id
+            const available_stock = document.getElementById('available_stock');
+            // select add_cart_btn via id
+            const add_cart_btn = document.getElementById('add_cart_btn');
+            // trim available stock to get only number
+            const available_stock_number = parseInt(available_stock.innerText.split(' ')[2]);
+            // disable add to cart button if available stock is 0
+            if (available_stock_number === 0) {
+                add_cart_btn.disabled = true;
+            }
+        }
+
+        function add_to_cart() {
+            const product_id = event.target.value;
+            const address = `http://127.0.0.1:8000/add-product/${product_id}/`;
+            axios.get(address).then(
+                function (response) {
+                    const data = response.data;
+                    console.log(data);
+                    // select available stock via id
+                    const available_stock = document.getElementById('available_stock');
+                    // select add_cart_btn via id
+                    const add_cart_btn = document.getElementById('add_cart_btn');
+                    // trim available stock to get only number
+                    const available_stock_number = parseInt(available_stock.innerText.split(' ')[2]);
+                    // reduce available stock number by 1
+                    const new_available_stock_number = available_stock_number - 1;
+                    // set new available stock number
+                    available_stock.innerText = `Available Stock: ${new_available_stock_number}`;
+                    // disable add to cart button if available stock is 0
+                    if (new_available_stock_number === 0) {
+                        add_cart_btn.disabled = true;
+                    }
+                }
+            )
+        }
+    </script>
+{% endblock %}
