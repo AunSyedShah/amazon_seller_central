@@ -74,11 +74,13 @@ def checkout(request):
     if request.method == "GET":
         user = request.user
         order = Order.objects.create(user=user, total_price=cart_total_price)
+        # order have many products, get products from cart and add to order with quantity
         for item in individual_items:
             product = Product.objects.get(pk=item["product_id"])
-            product.quantity_available -= item["quantity"]
+            order.products.add(product, through_defaults={"quantity": item["quantity"]})
+            # reduce quantity of product
+            # product.quantity_available -= item["quantity"]
             product.save()
-            order.products.add(product)
         cart.clear_cart()
         # email code
         # subject = 'Order Confirmation'
@@ -98,5 +100,5 @@ def print_order_history(request):
     orders = Order.objects.filter(user=user)
     context["orders"] = orders
     for order in orders:
-        print(order.products)
+        print(order.products.all())
     return render(request, "main_app/order_history.html", context)
