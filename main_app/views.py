@@ -77,7 +77,10 @@ def checkout(request):
         # order have many products, get products from cart and add to order with quantity
         for item in individual_items:
             product = Product.objects.get(pk=item["product_id"])
-            order.products.add(product, through_defaults={"quantity": item["quantity"]})
+            # order.products.add(product, through_defaults={"quantity": item["quantity"]})
+            # add product to order with order_quantity and save it
+            order.products.add(product, through_defaults={"order_quantity": item["quantity"]})
+            product.order_quantity = item["quantity"]
             # reduce quantity of product
             # product.quantity_available -= item["quantity"]
             product.save()
@@ -98,7 +101,12 @@ def print_order_history(request):
     context = {}
     user = request.user
     orders = Order.objects.filter(user=user)
-    context["orders"] = orders
+    # print orders and products inside each order with individual quantity
     for order in orders:
-        print(order.products.all())
+        print(f"Order ID: {order.id}")
+        for product in order.products.all():
+            print(f"Product Name: {product.name}")
+            print(f"Product Price: {product.price}")
+            print(f"Product Quantity: {product.order_quantity}")
+    context["orders"] = orders
     return render(request, "main_app/order_history.html", context)

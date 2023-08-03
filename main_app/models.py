@@ -8,6 +8,7 @@ class Product(models.Model):
     price = models.IntegerField()
     quantity_available = models.IntegerField(default=0)
     image = models.ImageField(upload_to="product_images", default='None', blank=True, null=True)
+    order_quantity = models.IntegerField(default=0)
 
     def __str__(self):
         return f"{self.id} - {self.name} - {self.price}"
@@ -24,7 +25,7 @@ class UserProfile(models.Model):
 
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
-    products = models.ManyToManyField(Product)
+    products = models.ManyToManyField(Product, related_name="products")
     total_price = models.IntegerField(default=0)
     order_date = models.DateTimeField(auto_now_add=True)
     # approved, pending, delivered, cancelled
@@ -49,3 +50,7 @@ class Order(models.Model):
 
     def get_order_status(self):
         return self.order_status
+
+    # get quantity of a product in an order
+    def get_product_quantity(self, product):
+        return self.products.filter(id=product.id).count()
