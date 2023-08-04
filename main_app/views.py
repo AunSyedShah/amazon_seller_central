@@ -80,7 +80,7 @@ def checkout(request):
             # add product to order with order_quantity and save it
             order.products.add(product)
             product.order_quantity = item["quantity"]
-            # reduce quantity of product
+            # reduce quantity of product - remove this later
             # product.quantity_available -= item["quantity"]
             product.save()
         order.save()
