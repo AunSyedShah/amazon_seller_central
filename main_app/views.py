@@ -77,13 +77,13 @@ def checkout(request):
         # order have many products, get products from cart and add to order with quantity
         for item in individual_items:
             product = Product.objects.get(pk=item["product_id"])
-            # order.products.add(product, through_defaults={"quantity": item["quantity"]})
             # add product to order with order_quantity and save it
-            order.products.add(product, through_defaults={"order_quantity": item["quantity"]})
+            order.products.add(product)
             product.order_quantity = item["quantity"]
             # reduce quantity of product
             # product.quantity_available -= item["quantity"]
             product.save()
+        order.save()
         cart.clear_cart()
         # email code
         # subject = 'Order Confirmation'
