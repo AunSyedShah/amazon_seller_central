@@ -3,15 +3,63 @@
     Dashboard
 {% endblock %}
 {% block content %}
-    {% for order in orders %}
-        <h1>{{ order.id }}</h1>
-{#        {% for product in order %}#}
-{#            <h1>{{ product.id }}</h1>#}
-{#            <h1>{{ product.name }}</h1>#}
-{#            <h1>{{ product.price }}</h1>#}
-{#        {% endfor %}#}
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Order ID</th>
+            <th scope="col">Order Date</th>
+            <th scope="col">Order Price</th>
+            <th scope="col">Order Details</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for order in orders %}
+            <tr>
+                <td>{{ order.id }}</td>
+                <td>{{ order.order_date }}</td>
+                <td>{{ order.get_order_total_price }}</td>
+                <td>
+                    <ul class="list-group list-group-numbered">
+                        {% if order.get_order_status == 'Pending' %}
+                            <div class="alert alert-warning" role="alert">
+                                Status: {{ order.get_order_status }}
+                            </div>
+                        {% endif %}
+                        {% if order.get_order_status == 'Approved' %}
+                            <div class="alert alert-success" role="alert">
+                                Status: {{ order.get_order_status }}
+                            </div>
+                        {% endif %}
+                        {% if order.get_order_status == "Delivered" %}
+                            <div class="alert alert-info" role="alert">
+                                Status: {{ order.get_order_status }}
+                            </div>
+                        {% endif %}
+                        {% if order.get_order_status == 'Cancelled' %}
+                            <div class="alert alert-danger" role="alert">
+                                Status: {{ order.get_order_status }}
+                            </div>
+                        {% endif %}
+                        {% for product in order.products.all %}
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">{{ product.name }}</div>
+                                </div>
+                                <span class="badge bg-primary rounded-pill">{{ product.order_quantity }}</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {#        {% for product in order %}#}
+    {#            <h1>{{ product.id }}</h1>#}
+    {#            <h1>{{ product.name }}</h1>#}
+    {#            <h1>{{ product.price }}</h1>#}
+    {#        {% endfor %}#}
 
-    {% endfor %}
 
     <script>
         // javascript on load
