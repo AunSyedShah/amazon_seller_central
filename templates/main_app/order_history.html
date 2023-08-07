@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% block title %}
+    Dashboard
+{% endblock %}
+{% block content %}
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Order ID</th>
+            <th scope="col">Order Date</th>
+            <th scope="col">Order Price</th>
+            <th scope="col">Order Details</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for order in orders %}
+            <tr>
+                <td>{{ order.id }}</td>
+                <td>{{ order.order_date }}</td>
+                <td>{{ order.get_order_total_price }}</td>
+                <td>
+                    <ul class="list-group list-group-numbered">
+                        {% if order.get_order_status == 'Pending' %}
+                            <div class="alert alert-warning" role="alert">
+                                Status: {{ order.get_order_status }}
+                            </div>
+                        {% endif %}
+                        {% if order.get_order_status == 'Approved' %}
+                            <div class="alert alert-success" role="alert">
+                                Status: {{ order.get_order_status }}
+                            </div>
+                        {% endif %}
+                        {% if order.get_order_status == "Delivered" %}
+                            <div class="alert alert-info" role="alert">
+                                Status: {{ order.get_order_status }}
+                            </div>
+                        {% endif %}
+                        {% if order.get_order_status == 'Cancelled' %}
+                            <div class="alert alert-danger" role="alert">
+                                Status: {{ order.get_order_status }}
+                            </div>
+                        {% endif %}
+                        {% for product in order.products.all %}
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">{{ product.name }}</div>
+                                </div>
+                                <span class="badge bg-primary rounded-pill">{{ product.order_quantity }}</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {#        {% for product in order %}#}
+    {#            <h1>{{ product.id }}</h1>#}
+    {#            <h1>{{ product.name }}</h1>#}
+    {#            <h1>{{ product.price }}</h1>#}
+    {#        {% endfor %}#}
+
+
+    <script>
+        // javascript on load
+        window.onload = function () {
+            // select available stock via id
+            const available_stock = document.getElementById('available_stock');
+            // select add_cart_btn via id
+            const add_cart_btn = document.getElementById('add_cart_btn');
+            // trim available stock to get only number
+            const available_stock_number = parseInt(available_stock.innerText.split(' ')[2]);
+            // disable add to cart button if available stock is 0
+            if (available_stock_number === 0) {
+                add_cart_btn.disabled = true;
+            }
+        }
+
+        function add_to_cart() {
+            const product_id = event.target.value;
+            const address = `http://127.0.0.1:8000/add-product/${product_id}/`;
+            axios.get(address).then(
+                function (response) {
+                    const data = response.data;
+                    console.log(data);
+                    // select available stock via id
+                    const available_stock = document.getElementById('available_stock');
+                    // select add_cart_btn via id
+                    const add_cart_btn = document.getElementById('add_cart_btn');
+                    // trim available stock to get only number
+                    const available_stock_number = parseInt(available_stock.innerText.split(' ')[2]);
+                    // reduce available stock number by 1
+                    const new_available_stock_number = available_stock_number - 1;
+                    // set new available stock number
+                    available_stock.innerText = `Available Stock: ${new_available_stock_number}`;
+                    // disable add to cart button if available stock is 0
+                    if (new_available_stock_number === 0) {
+                        add_cart_btn.disabled = true;
+                    }
+                }
+            )
+        }
+    </script>
+{% endblock %}
