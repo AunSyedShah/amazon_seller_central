@@ -4,26 +4,37 @@
     Dashboard
 {% endblock %}
 {% block content %}
-    {% for product in products %}
-        {% if forloop.counter0|divisibleby:3 %}
-            <div class="row my-3">
-        {% endif %}
-    <div class="col-xs-12 my-1 col-sm-6 col-md-6 col-lg-4 d-flex justify-content-center">
-        <div class="card" style="width: 18rem;">
-            <img src="{{ product.image.url }}" class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title"><a role="button"
-                                          href="{% url 'main_app:product_detail' product.id %}">{{ product.name }}</a>
-                </h5>
-                <p class="card-text">Rs. {{ product.price }}</p>
-                <h6>Available Stock: {{ product.quantity_available }}</h6>
+    {#    two columns, one for search, another for product display which is thrice wider than search #}
+    <div class="row">
+        <div class="col-1">
+            <form action="" method="get">
+                dynamic options for price range
+
+            </form>
+        </div>
+        <div class="col-11">
+            {% for product in products %}
+                {% if forloop.counter0|divisibleby:3 %}
+                    <div class="row my-3">
+                {% endif %}
+            <div class="col-xs-12 my-1 col-sm-6 col-md-6 col-lg-4 d-flex justify-content-center">
+                <div class="card" style="width: 18rem;">
+                    <img src="{{ product.image.url }}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title"><a role="button"
+                                                  href="{% url 'main_app:product_detail' product.id %}">{{ product.name }}</a>
+                        </h5>
+                        <p class="card-text">Rs. {{ product.price }}</p>
+                        <h6>Available Stock: {{ product.quantity_available }}</h6>
+                    </div>
+                </div>
             </div>
+            {% if forloop.counter0|add:1|divisibleby:3 or forloop.last %}
+                </div>
+            {% endif %}
+            {% endfor %}
         </div>
     </div>
-    {% if forloop.counter0|add:1|divisibleby:3 or forloop.last %}
-        </div>
-    {% endif %}
-    {% endfor %}
 
     <script>
 

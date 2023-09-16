@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, UserProfile, Order
+from .models import Product, UserProfile, Order, Category
 from PIL import Image
 from io import BytesIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
@@ -31,3 +31,4 @@ class ProductAdmin(admin.ModelAdmin):
 admin.site.register(Product, ProductAdmin)
 admin.site.register(UserProfile)
 admin.site.register(Order)
+admin.site.register(Category)

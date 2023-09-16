@@ -1,21 +1,29 @@
 from django.db import models
 from django.contrib.auth.models import User
-import uuid
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=100, blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.id} - {self.name}"
 
 
 class Product(models.Model):
     name = models.CharField(max_length=100)
     price = models.IntegerField()
     quantity_available = models.IntegerField(default=0)
-    image = models.ImageField(upload_to="product_images", default='None', blank=True, null=True)
+    image = models.ImageField(upload_to="product_images", blank=True, null=True)
     order_quantity = models.IntegerField(default=0)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="products", blank=True,
+                                 null=True)
 
     def __str__(self):
         return f"{self.id} - {self.name} - {self.price}"
 
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, default=None)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
         return f"{self.user.first_name} {self.user.last_name}'s Profile"
@@ -24,7 +32,7 @@ class UserProfile(models.Model):
 # Order and Order Model class
 
 class Order(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     products = models.ManyToManyField(Product, related_name="products")
     total_price = models.IntegerField(default=0)
     order_date = models.DateTimeField(auto_now_add=True)
