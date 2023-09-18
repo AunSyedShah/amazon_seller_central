@@ -110,3 +110,12 @@ def print_order_history(request):
             print(f"Product Quantity: {product.order_quantity}")
     context["orders"] = orders
     return render(request, "main_app/order_history.html", context)
+
+
+def review(request):
+    if request.method == 'POST':
+        if 'review_submit' in request.POST:
+            print(request.POST)
+        order_id = request.POST.get('order_id')
+        render(request, "main_app/review.html", {'order_id': order_id})
+    return render(request, "main_app/review.html")

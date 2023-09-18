@@ -26,6 +26,8 @@ SECRET_KEY = "django-insecure-5ntgqmu0a#b82)ak7g4dqc(^76-s-atmx%4bv8+sdhy^qzh2lo
 DEBUG = True
 
 ALLOWED_HOSTS = []
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
 
 # Application definition
 
@@ -41,16 +43,19 @@ INSTALLED_APPS = [
     "crispy_bootstrap5",
     "main_app.apps.MainAppConfig",
     "cart_app",
+    "corsheaders"
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+
 ]
 
 ROOT_URLCONF = "amazon_seller_central.urls"

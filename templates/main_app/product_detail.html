@@ -2,11 +2,60 @@
 {% block title %}
     Dashboard
 {% endblock %}
+{% block css_style %}
+	<style>
+    /* CSS styles for the dashboard */
+    .product-details {
+        text-align: center;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        background-color: #f9f9f9;
+        margin: 20px auto;
+        max-width: 400px;
+    }
+
+    .product-name {
+        color: #333;
+        font-size: 24px;
+        margin: 0;
+    }
+
+    .product-price {
+        color: #007bff;
+        font-size: 20px;
+        margin: 10px 0;
+    }
+
+    .available-stock {
+        color: #28a745;
+        font-size: 18px;
+        margin: 10px 0;
+    }
+
+    .add-to-cart-btn {
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    .add-to-cart-btn:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+    }
+</style>
+{% endblock %}
 {% block content %}
-    <h1>{{ product.name }}</h1>
-    <h2>Rs. {{ product.price }}</h2>
-    <h3 id="available_stock">Available Stock: {{ product.quantity_available }}</h3>
-    <button onclick="add_to_cart()" value="{{ product.id }}" id="add_cart_btn">Add To Cart</button>
+    <div class="product-details">
+        <h1 class="product-name">{{ product.name }}</h1>
+        <h2 class="product-price">Rs. {{ product.price }}</h2>
+        <h3 class="available-stock" id="available_stock">Available Stock: {{ product.quantity_available }}</h3>
+        <button onclick="add_to_cart()" value="{{ product.id }}" id="add_cart_btn" class="add-to-cart-btn">Add To Cart</button>
+    </div>
     <script>
         // javascript on load
         window.onload = function () {

@@ -62,3 +62,14 @@ class Order(models.Model):
     # get quantity of a product in an order
     def get_product_quantity(self, product):
         return self.products.filter(id=product.id).count()
+
+
+class Review(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="reviews")
+    review = models.TextField()
+    rating = models.IntegerField(default=0)
+    date = models.DateTimeField(auto_now_add=True)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="reviews")
+
+    def __str__(self) -> str:
+        return f"{self.user.first_name} {self.user.last_name} - {self.review} - {self.rating} - {self.date}"
