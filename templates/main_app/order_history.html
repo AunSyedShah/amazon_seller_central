@@ -26,7 +26,7 @@
                     <form method="post" action="{% url 'main_app:review' %}">
                         {% csrf_token %}
                         <input type="hidden" name="order_id" value="{{ order.id }}">
-                        <input type="submit" value="Give Review" class="btn btn-primary">
+                        <input type="submit" value="Give Review" class="btn btn-primary my-1">
                     </form>
                         {% if order.get_order_status == 'Pending' %}
                             <div class="alert alert-warning" role="alert">

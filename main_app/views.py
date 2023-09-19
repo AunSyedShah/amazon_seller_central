@@ -7,12 +7,26 @@ from django.contrib.sessions.models import Session
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.conf import settings
-
+from django.db import connection
 
 
 # Create your views here.
 def dashboard(request):
-    context = {"products": Product.objects.all()}
+    products = Product.objects.all()
+    search_name = request.GET.get('search_name')
+    search_price_min = request.GET.get('search_price_min')
+    search_price_max = request.GET.get('search_price_max')
+    search_color = request.GET.get('search_color')
+
+    # Apply filters based on search parameters
+    if search_name:
+        products = products.filter(name__icontains=search_name)
+    if search_price_min:
+        products = products.filter(price__gte=search_price_min)
+    if search_price_max:
+        products = products.filter(price__lte=search_price_max)
+
+    context = {'products': products}
     return render(request, "main_app/dashboard.html", context)
 
 
@@ -122,7 +136,10 @@ def review(request):
             review_text = request.POST.get('review')
             review_ratings = request.POST.get('ratings')
             order_id = request.session.get('order_id')
-            Review.objects.create(user=user, review=review_text, order_id=order_id, rating=review_ratings)
+            connection.cursor().execute(
+                "INSERT INTO review (user_id, review_text, order_id) VALUES (%s, %s, %s)",
+                [user.id, review_text, order_id])
+            # Review.objects.create(user=user, review=review_text, order_id=order_id, rating=review_ratings)
             messages.success(request, "Review Submitted Successfully")
             return redirect('main_app:dashboard')
         render(request, "main_app/review.html")

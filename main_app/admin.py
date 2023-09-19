@@ -28,10 +28,8 @@ class ProductAdmin(admin.ModelAdmin):
         super().save_model(request, obj, form, change)
 
 
-
 admin.site.register(Product, ProductAdmin)
 admin.site.register(UserProfile)
 admin.site.register(Order)
 admin.site.register(Category)
 admin.site.register(Review)
-
