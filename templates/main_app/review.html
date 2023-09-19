@@ -8,7 +8,7 @@
     <form method="post">
     {% csrf_token %}
 {#    html form  with two fields review and ratings #}
-        <input type="hidden" name="order_id" value="{{ order_id }}">
+        <input type="hidden" name="order_id" value="{{ request.session.order_id }}">
     <div class="form-group">
         <label for="review">Review</label>
         <textarea class="form-control" id="review" name="review" rows="3"></textarea>

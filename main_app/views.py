@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Product, Order
+from .models import Product, Order, Review
 from cart_app.cart import Cart
 from django.http import JsonResponse
 from django.contrib import messages
@@ -7,6 +7,7 @@ from django.contrib.sessions.models import Session
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.conf import settings
+
 
 
 # Create your views here.
@@ -114,8 +115,15 @@ def print_order_history(request):
 
 def review(request):
     if request.method == 'POST':
-        if 'review_submit' in request.POST:
-            print(request.POST)
         order_id = request.POST.get('order_id')
-        render(request, "main_app/review.html", {'order_id': order_id})
+        request.session['order_id'] = order_id
+        if 'review_submit' in request.POST:
+            user = request.user
+            review_text = request.POST.get('review')
+            review_ratings = request.POST.get('ratings')
+            order_id = request.session.get('order_id')
+            Review.objects.create(user=user, review=review_text, order_id=order_id, rating=review_ratings)
+            messages.success(request, "Review Submitted Successfully")
+            return redirect('main_app:dashboard')
+        render(request, "main_app/review.html")
     return render(request, "main_app/review.html")
