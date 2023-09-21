@@ -88,6 +88,9 @@ def checkout(request):
     cart_detail = cart.get_cart_items()
     individual_items = cart_detail["individual_items"]
     cart_total_price = cart_detail["cart_total_price"]
+    # 10 to 15 percent discount on cart_total_price
+    discount = cart_total_price * 0.1
+    cart_total_price = cart_total_price - discount
     context["individual_items"] = individual_items
     context["cart_total_price"] = cart_total_price
     if request.method == "GET":
