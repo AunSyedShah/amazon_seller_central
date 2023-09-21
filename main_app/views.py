@@ -34,14 +34,14 @@ def add_product(request, product_id):
     cart = Cart(request)
     product = Product.objects.get(pk=product_id)
     response = cart.add_product(product)
-    return JsonResponse(response)
+    return JsonResponse(response, safe=False)
 
 
 def remove_product(request, product_id):
     cart = Cart(request)
     product = Product.objects.get(pk=product_id)
     response = cart.remove_product(product)
-    return JsonResponse(response)
+    return JsonResponse(response, safe=False)
 
 
 def display_cart(request):
@@ -52,6 +52,10 @@ def display_cart(request):
     cart_total_price = cart_detail["cart_total_price"]
     context["individual_items"] = individual_items
     context["cart_total_price"] = cart_total_price
+    # 10 - 15 % discount on cart_total_price
+    discount = cart_total_price * 0.1
+    context["discount"] = discount
+    context["cart_total_price"] = cart_total_price - discount
     return render(request, "main_app/cart.html", context)
 
 
@@ -96,7 +100,7 @@ def checkout(request):
             order.products.add(product)
             product.order_quantity = item["quantity"]
             # reduce quantity of product - remove this later
-            # product.quantity_available -= item["quantity"]
+            product.quantity_available -= item["quantity"]
             product.save()
         order.save()
         cart.clear_cart()
@@ -116,13 +120,6 @@ def print_order_history(request):
     context = {}
     user = request.user
     orders = Order.objects.filter(user=user)
-    # print orders and products inside each order with individual quantity
-    for order in orders:
-        print(f"Order ID: {order.id}")
-        for product in order.products.all():
-            print(f"Product Name: {product.name}")
-            print(f"Product Price: {product.price}")
-            print(f"Product Quantity: {product.order_quantity}")
     context["orders"] = orders
     return render(request, "main_app/order_history.html", context)
 

@@ -17,24 +17,28 @@
     <div>
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">Amazon Central</a>
+                <a class="navbar-brand" href="{% url 'main_app:dashboard' %}">Amazon Central</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
+
                 </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+            <div>
+                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page"
-                               href="{% url 'main_app:dashboard' %}">Home</a>
+                               href="{% url 'main_app:cart' %}">Cart</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                                aria-expanded="false">
                                 More Actions
                             </a>
-                            <ul class="dropdown-menu">
+
+                             <ul class="dropdown-menu">
                                 {% if user.is_authenticated %}
                                     <li>
                                     <a class="dropdown-item" href="{% url 'main_app:order_history' %}">Order History</a>
@@ -54,7 +58,10 @@
                             </ul>
                         </li>
                     </ul>
+
                 </div>
+            </div>
+
             </div>
         </nav>
     </div>
