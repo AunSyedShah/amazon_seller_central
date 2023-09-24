@@ -1,0 +1,9 @@
+<!-- cart.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Order # {{ request.session.order_id }} placed successfully </h1>
+    <a role="button" class="btn btn-primary" href="{% url 'main_app:order_history' %}">Track Order</a>
+    <a role="button" class="btn btn-primary" href="{% url 'main_app:dashboard' %}">Return to Dashboard</a>
+{% endblock %}

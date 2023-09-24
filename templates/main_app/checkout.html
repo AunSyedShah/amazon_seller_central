@@ -3,26 +3,27 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<table class="table">
-    <thead>
-      <tr>
-        <th scope="col">Product Name</th>
-        <th scope="col">Price</th>
-        <th scope="col">Quantity</th>
-        <th scope="col">Total</th>
-      </tr>
-    </thead>
-    <tbody>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Product Name</th>
+            <th scope="col">Price</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Total</th>
+        </tr>
+        </thead>
+        <tbody>
         {% for item in individual_items %}
-      <tr>
-        <th>{{item.product_name}}</th>
-        <td>{{item.price}}</td>
-        <td>{{item.quantity}}x</td>
-        <td>Rs. {{item.total}}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-
-<h4>{{ cart_total_price }}</h4>
+            <tr>
+                <th>{{ item.product_name }}</th>
+                <td>{{ item.price }}</td>
+                <td>{{ item.quantity }}x</td>
+                <td>Rs. {{ item.total }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <section>
+        <h4>{{ cart_total_price }}</h4>
+    </section>
 {% endblock %}

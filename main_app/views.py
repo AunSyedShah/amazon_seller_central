@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Product, Order, Review
+from .models import Product, Order, Review, Category
 from cart_app.cart import Cart
 from django.http import JsonResponse
 from django.contrib import messages
@@ -16,7 +16,7 @@ def dashboard(request):
     search_name = request.GET.get('search_name')
     search_price_min = request.GET.get('search_price_min')
     search_price_max = request.GET.get('search_price_max')
-    search_color = request.GET.get('search_color')
+    category = request.GET.get('category')
 
     # Apply filters based on search parameters
     if search_name:
@@ -25,8 +25,12 @@ def dashboard(request):
         products = products.filter(price__gte=search_price_min)
     if search_price_max:
         products = products.filter(price__lte=search_price_max)
+    if category:
+        products = products.filter(category_id=category)
 
     context = {'products': products}
+    categories = Category.objects.all()
+    context["categories"] = categories
     return render(request, "main_app/dashboard.html", context)
 
 
@@ -105,6 +109,7 @@ def checkout(request):
             # reduce quantity of product - remove this later
             product.quantity_available -= item["quantity"]
             product.save()
+        request.session['order_id'] = order.id
         order.save()
         cart.clear_cart()
         # email code
@@ -115,14 +120,14 @@ def checkout(request):
         # send_mail(subject, message, email_from, recipient_list)
         # email code end
         messages.success(request, "Order Placed Successfully")
-        return redirect("main_app:dashboard")
+        return redirect("main_app:order_placed")
     return render(request, "main_app/checkout.html", context)
 
 
 def print_order_history(request):
     context = {}
     user = request.user
-    orders = Order.objects.filter(user=user)
+    orders = Order.objects.filter(user=user).order_by("-order_date")
     context["orders"] = orders
     return render(request, "main_app/order_history.html", context)
 
@@ -141,6 +146,39 @@ def review(request):
                 [user.id, review_text, order_id])
             # Review.objects.create(user=user, review=review_text, order_id=order_id, rating=review_ratings)
             messages.success(request, "Review Submitted Successfully")
-            return redirect('main_app:dashboard')
+            return redirect('main_app:order_placed')
         render(request, "main_app/review.html")
     return render(request, "main_app/review.html")
+
+
+def order_placed(request):
+    return render(request, 'main_app/order_placed.html')
+
+
+# get all categories of products and return JSON response
+def get_categories(request):
+    categories = Category.objects.all()
+    categories_list = []
+    for category in categories:
+        categories_list.append(category.name)
+    return JsonResponse(categories_list, safe=False)
+
+
+def add_products(request):
+    context = {}
+    if request.method == 'POST':
+        # name, price, quantity, image, category
+        name = request.POST.get('name')
+        price = request.POST.get('price')
+        quantity = request.POST.get('quantity')
+        image = request.FILES.get('image')
+        category = request.POST.get('category')
+        category = Category.objects.get(pk=category)
+        product = Product.objects.create(name=name, price=price, quantity_available=quantity, image=image,
+                                         category=category)
+        product.save()
+        messages.success(request, "Product Added Successfully")
+        return redirect(request.path)
+    categories = Category.objects.all()
+    context["categories"] = categories
+    return render(request, 'main_app/add_product.html', context)

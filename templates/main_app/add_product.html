@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% block title %}
+    Add Product
+{% endblock %}
+{% block css_style %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        select {
+            height: 40px;
+        }
+
+        input[type="file"] {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button[type="submit"] {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h2>Add Product</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="name">Name</label>
+            <input type="text" name="name" id="name" placeholder="Name">
+            <label for="price">Price</label>
+            <input type="number" name="price" id="price" placeholder="Price">
+            <label for="quantity">Quantity</label>
+            <input type="text" name="quantity" id="quantity" placeholder="Quantity">
+            <label for="image">Image</label>
+            <input type="file" name="image" id="image" accept="image/jpeg">
+            <label for="category">Category</label>
+            <select name="category" id="category">
+                {% for category in categories %}
+                    <option value="{{ category.id }}">{{ category.name }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Add</button>
+        </form>
+    </div>
+{% endblock %}
