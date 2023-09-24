@@ -12,7 +12,7 @@ from django.db import connection
 
 # Create your views here.
 def dashboard(request):
-    products = Product.objects.all()
+    products = Product.objects.filter(admin_approved=True)
     search_name = request.GET.get('search_name')
     search_price_min = request.GET.get('search_price_min')
     search_price_max = request.GET.get('search_price_max')
@@ -53,6 +53,7 @@ def display_cart(request):
     cart = Cart(request)
     cart_detail = cart.get_cart_items()
     individual_items = cart_detail["individual_items"]
+    print(individual_items)
     cart_total_price = cart_detail["cart_total_price"]
     context["individual_items"] = individual_items
     context["cart_total_price"] = cart_total_price

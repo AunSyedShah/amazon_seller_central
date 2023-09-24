@@ -18,6 +18,7 @@ class Product(models.Model):
     order_quantity = models.IntegerField(default=0, blank=True, null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="products", blank=True,
                                  null=True)
+    admin_approved = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.id} - {self.name} - {self.price}"

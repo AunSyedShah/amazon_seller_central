@@ -38,25 +38,27 @@
             </form>
         </div>
         <div class="col">
-            {% for product in products %}
-                {% if forloop.counter0|divisibleby:3 %}
-                    <div class="row my-3">
-                {% endif %}
-            <div class="col-xs-12 my-1 col-sm-6 col-md-6 col-lg-4 d-flex justify-content-center">
-                <div class="card" style="width: 18rem;">
-                    <img src="{{ product.image.url }}" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title"><a role="button"
-                                                  href="{% url 'main_app:product_detail' product.id %}">{{ product.name }}</a>
-                        </h5>
-                        <p class="card-text">Rs. {{ product.price }}</p>
-                        <h6>Available Stock: {{ product.quantity_available }}</h6>
-                    </div>
+            {% for category in categories %}
+                <h3>Category: {{ category.name }}</h3>
+                <div class="row">
+                    {% for product in products %}
+                        {% if product.category.name == category.name %}
+                            <div class="col">
+                                <!-- Display product details here -->
+                                <div class="card my-1" style="width: 18rem;">
+                                    <img src="{{ product.image.url }}" class="card-img-top"
+                                         alt="{{ product.image.id }}">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ product.name }}</h5>
+                                        <p class="card-text">Price: {{ product.price }}</p>
+                                        <a href="{% url 'main_app:product_detail' product.id %}" class="btn btn-primary">Add
+                                            To Cart</a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
                 </div>
-            </div>
-            {% if forloop.counter0|add:1|divisibleby:3 or forloop.last %}
-                </div>
-            {% endif %}
             {% endfor %}
         </div>
     </div>
