@@ -98,6 +98,7 @@ def checkout(request):
     cart_total_price = cart_total_price - discount
     context["individual_items"] = individual_items
     context["cart_total_price"] = cart_total_price
+    shipping_address = request.GET.get("address")
     if request.method == "GET":
         user = request.user
         order = Order.objects.create(user=user, total_price=cart_total_price)
@@ -111,6 +112,7 @@ def checkout(request):
             product.quantity_available -= item["quantity"]
             product.save()
         request.session['order_id'] = order.id
+        order.shipping_address = shipping_address
         order.save()
         cart.clear_cart()
         # email code
