@@ -144,10 +144,8 @@ def review(request):
             review_text = request.POST.get('review')
             review_ratings = request.POST.get('ratings')
             order_id = request.session.get('order_id')
-            connection.cursor().execute(
-                "INSERT INTO review (user_id, review_text, order_id) VALUES (%s, %s, %s)",
-                [user.id, review_text, order_id])
-            # Review.objects.create(user=user, review=review_text, order_id=order_id, rating=review_ratings)
+            order = Order.objects.get(pk=order_id)
+            Review.objects.create(user=user, review=review_text, rating=review_ratings, order=order)
             messages.success(request, "Review Submitted Successfully")
             return redirect('main_app:dashboard')
         render(request, "main_app/review.html")

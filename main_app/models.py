@@ -84,7 +84,6 @@ class Review(models.Model):
     rating = models.IntegerField(default=0)
     date = models.DateTimeField(auto_now_add=True)
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="reviews")
-    cnic = models.CharField(max_length=13, blank=True, null=True)
 
     def __str__(self) -> str:
         return f"{self.user.first_name} {self.user.last_name} - {self.review} - {self.rating} - {self.date}"
