@@ -59,6 +59,8 @@ class Order(models.Model):
         max_length=10, choices=order_status_choices, default="Pending"
     )
 
+    shipping_address = models.CharField(max_length=100, blank=True, null=True)
+
     def __str__(self) -> str:
         return f"Order id: {self.id} - User: {self.user.first_name} {self.user.last_name} - Total Price: {self.total_price} - Order Status: {self.order_status}"
 
@@ -86,3 +88,9 @@ class Review(models.Model):
 
     def __str__(self) -> str:
         return f"{self.user.first_name} {self.user.last_name} - {self.review} - {self.rating} - {self.date}"
+
+
+class ContactUs(models.Model):
+    name = models.CharField(max_length=50)
+    email = models.EmailField()
+    message = models.TextField()

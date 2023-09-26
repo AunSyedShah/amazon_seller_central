@@ -114,11 +114,11 @@ def checkout(request):
         order.save()
         cart.clear_cart()
         # email code
-        # subject = 'Order Confirmation'
-        # message = f"Your order has been placed successfully. Your order id is {order.id}"
-        # email_from = settings.EMAIL_HOST_USER
-        # recipient_list = ['engrrizwanaslam@gmail.com', ]
-        # send_mail(subject, message, email_from, recipient_list)
+        subject = 'Order Confirmation'
+        message = f"Your order has been placed successfully. Your order id is {order.id}"
+        email_from = settings.EMAIL_HOST_USER
+        recipient_list = [f'{request.user.email}', ]
+        send_mail(subject, message, email_from, recipient_list)
         # email code end
         messages.success(request, "Order Placed Successfully")
         return redirect("main_app:order_placed")
@@ -147,7 +147,7 @@ def review(request):
                 [user.id, review_text, order_id])
             # Review.objects.create(user=user, review=review_text, order_id=order_id, rating=review_ratings)
             messages.success(request, "Review Submitted Successfully")
-            return redirect('main_app:order_placed')
+            return redirect('main_app:dashboard')
         render(request, "main_app/review.html")
     return render(request, "main_app/review.html")
 
@@ -183,3 +183,18 @@ def add_products(request):
     categories = Category.objects.all()
     context["categories"] = categories
     return render(request, 'main_app/add_product.html', context)
+
+
+def contact_us(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        message = request.POST.get('message')
+
+        connection.cursor().execute(
+            "INSERT INTO main_app_contactus (name, email, message) VALUES (%s, %s, %s)",
+            [name, email, message])
+        # ContactUs.objects.create(name=name, email=email, message=message)
+        messages.success(request, "Message Sent Successfully")
+        return redirect('main_app:dashboard')
+    return render(request, "main_app/contact_us.html")

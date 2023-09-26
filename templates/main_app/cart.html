@@ -31,6 +31,7 @@
     {% endif %}
     <hr>
     {% if cart_total_price > 0 %}
+        <a role="button" class="btn btn-danger" href="{% url 'main_app:clear-cart' %}">Clear Cart</a>
         <a role="button" class="btn btn-success" href="{% url 'main_app:checkout' %}">Place Order</a>
     {% endif %}
 {% endblock %}

@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm
+from .forms import CustomUserRegistrationForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
@@ -9,15 +9,14 @@ from django.contrib import messages
 def register_user(request):
     context = {}
     if request.POST:
-        form = UserCreationForm(request.POST)
-        print(form)
+        form = CustomUserRegistrationForm(request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, 'Account created successfully')
             return redirect('account_app:login')
         else:
             messages.error(request, form.errors)
-    form = UserCreationForm()
+    form = CustomUserRegistrationForm()
     context['form'] = form
     return render(request, 'account_app/register.html', context)
 
