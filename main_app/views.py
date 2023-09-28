@@ -181,6 +181,11 @@ def add_products(request):
         messages.success(request, "Product Added Successfully")
         return redirect(request.path)
     categories = Category.objects.all()
+    # get all categories using sql
+    # result = connection.cursor().execute("SELECT * FROM main_app_category")
+    # categories = result.fetchall()
+    # for category in categories:
+    #     print(category)
     context["categories"] = categories
     return render(request, 'main_app/add_product.html', context)
 
